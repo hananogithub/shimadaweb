@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# サイトマップの場所
+Sitemap: https://shimadaweb.online/sitemap.xml
+
+# 検索エンジン向けの設定
+Disallow: /admin/
+Disallow: /private/
+Disallow: /*.log$
