@@ -151,13 +151,10 @@ document.addEventListener('DOMContentLoaded', function() {
             // フォームデータを取得
             const formData = new FormData(this);
             
-            // Formspreeに送信
-            fetch('https://formspree.io/f/movnrwrd', {
+            // PHPファイルに送信
+            fetch('contact-xserver.php', {
                 method: 'POST',
-                body: formData,
-                headers: {
-                    'Accept': 'application/json'
-                }
+                body: formData
             })
             .then(response => {
                 if (response.ok) {
