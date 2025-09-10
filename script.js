@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const formData = new FormData(this);
             
             // Formspreeに送信
-            fetch('https://formspree.io/f/mpwjbrdy', {
+            fetch('https://formspree.io/f/movnrwrd', {
                 method: 'POST',
                 body: formData,
                 headers: {

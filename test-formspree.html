@@ -79,13 +79,13 @@
             <h3>Formspree設定</h3>
             <p>このフォームはFormspreeを使用してメール送信を行います。</p>
             <ul>
-                <li><strong>Formspree URL:</strong> https://formspree.io/f/mpwjbrdy</li>
+                <li><strong>Formspree URL:</strong> https://formspree.io/f/movnrwrd</li>
                 <li><strong>送信先:</strong> Formspreeで設定されたメールアドレス</li>
                 <li><strong>テスト内容:</strong> フォームから送信されたメールが正しく届くか確認</li>
             </ul>
         </div>
 
-        <form class="test-form" id="testForm" action="https://formspree.io/f/mpwjbrdy" method="POST">
+        <form class="test-form" id="testForm" action="https://formspree.io/f/movnrwrd" method="POST">
             <div class="form-group">
                 <label for="companyName">会社名・お名前 <span style="color: red;">*</span></label>
                 <input type="text" id="companyName" name="companyName" value="テスト送信者" required>
@@ -152,7 +152,7 @@
             
             const formData = new FormData(this);
             
-            fetch('https://formspree.io/f/mpwjbrdy', {
+            fetch('https://formspree.io/f/movnrwrd', {
                 method: 'POST',
                 body: formData,
                 headers: {
@@ -168,7 +168,7 @@
                     resultDiv.innerHTML = `
                         <h3>✅ Formspreeテストメール送信成功！</h3>
                         <p><strong>メッセージ:</strong> お問い合わせありがとうございます。1営業日以内にご返信いたします。</p>
-                        <p><strong>Formspree URL:</strong> https://formspree.io/f/mpwjbrdy</p>
+                        <p><strong>Formspree URL:</strong> https://formspree.io/f/movnrwrd</p>
                         <p><strong>次のステップ:</strong> Formspreeで設定されたメールアドレスを確認してください。</p>
                     `;
                     this.reset();
