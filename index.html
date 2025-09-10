@@ -535,6 +535,11 @@
                         <textarea id="message" name="message" rows="5" placeholder="ご要望やご質問をお聞かせください" required></textarea>
                     </div>
                     
+                    <!-- スパム対策用の隠しフィールド -->
+                    <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+                    <input type="hidden" name="_next" value="https://shimadaweb.online/thank-you.html">
+                    <input type="hidden" name="_subject" value="【しまだWeb制作】お問い合わせ">
+                    
                     <div class="form-group checkbox-group">
                         <label class="checkbox-label">
                             <input type="checkbox" id="privacy" name="privacy" required>
