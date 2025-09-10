@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>デバッグ用フォーム - しまだWeb制作</title>
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .debug-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .submit-btn {
+            background: #2c5aa0;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .debug-info {
+            background: #e8f4fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .debug-log {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug-container">
+        <h1>🔍 デバッグ用フォーム</h1>
+        
+        <div class="debug-info">
+            <h3>Formspree設定確認</h3>
+            <p><strong>フォームID:</strong> movnrwrd</p>
+            <p><strong>URL:</strong> https://formspree.io/f/movnrwrd</p>
+            <p><strong>送信先:</strong> Formspreeで設定されたメールアドレス</p>
+        </div>
+
+        <form id="debugForm" action="https://formspree.io/f/movnrwrd" method="POST">
+            <div class="form-group">
+                <label for="companyName">会社名・お名前 <span style="color: red;">*</span></label>
+                <input type="text" id="companyName" name="companyName" value="デバッグテスト" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">メールアドレス <span style="color: red;">*</span></label>
+                <input type="email" id="email" name="email" value="debug@example.com" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">電話番号</label>
+                <input type="tel" id="phone" name="phone" value="080-1234-5678">
+            </div>
+            
+            <div class="form-group">
+                <label for="service">ご希望のサービス</label>
+                <select id="service" name="service">
+                    <option value="consultation">無料相談のみ</option>
+                    <option value="light">ライトプラン（15万円〜）</option>
+                    <option value="standard">スタンダードプラン（50万円〜）</option>
+                    <option value="premium">プレミアムプラン（80万円〜）</option>
+                    <option value="maintenance">保守・運用（月額1万円〜）</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="message">お問い合わせ内容 <span style="color: red;">*</span></label>
+                <textarea id="message" name="message" rows="5" required>これはデバッグ用のテストメッセージです。
+
+送信日時: 2025年9月10日
+テスト目的: メール受信の確認
+
+しまだWeb制作 デバッグチーム</textarea>
+            </div>
+            
+            <!-- スパム対策フィールド -->
+            <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+            <input type="hidden" name="_next" value="https://shimadaweb.online/thank-you.html">
+            <input type="hidden" name="_subject" value="【しまだWeb制作】デバッグテスト">
+            
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="privacy" name="privacy" required checked>
+                    プライバシーポリシーに同意する
+                </label>
+            </div>
+            
+            <button type="submit" class="submit-btn">
+                📧 デバッグテストを送信
+            </button>
+        </form>
+
+        <div id="result" class="result" style="display: none;"></div>
+        <div id="debugLog" class="debug-log" style="display: none;"></div>
+    </div>
+
+    <script>
+        let debugLog = [];
+        
+        function addLog(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            debugLog.push(`[${timestamp}] ${message}`);
+            updateDebugLog();
+        }
+        
+        function updateDebugLog() {
+            const logElement = document.getElementById('debugLog');
+            logElement.textContent = debugLog.join('\n');
+            logElement.style.display = 'block';
+        }
+        
+        document.getElementById('debugForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            addLog('フォーム送信開始');
+            
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '📤 送信中...';
+            
+            const formData = new FormData(this);
+            
+            // フォームデータをログに記録
+            addLog('フォームデータ:');
+            for (let [key, value] of formData.entries()) {
+                addLog(`  ${key}: ${value}`);
+            }
+            
+            addLog('Formspreeに送信中...');
+            
+            fetch('https://formspree.io/f/movnrwrd', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                addLog(`レスポンス受信: ${response.status} ${response.statusText}`);
+                
+                const resultDiv = document.getElementById('result');
+                resultDiv.style.display = 'block';
+                
+                if (response.ok) {
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `
+                        <h3>✅ デバッグテスト送信成功！</h3>
+                        <p><strong>ステータス:</strong> ${response.status}</p>
+                        <p><strong>メッセージ:</strong> お問い合わせありがとうございます。1営業日以内にご返信いたします。</p>
+                        <p><strong>次のステップ:</strong> Formspreeダッシュボードで送信履歴を確認してください。</p>
+                    `;
+                    addLog('送信成功 - Formspreeダッシュボードを確認してください');
+                    this.reset();
+                } else {
+                    return response.json().then(data => {
+                        resultDiv.className = 'result error';
+                        if (data.errors) {
+                            resultDiv.innerHTML = `
+                                <h3>❌ デバッグテスト送信失敗</h3>
+                                <p><strong>ステータス:</strong> ${response.status}</p>
+                                <p><strong>エラー:</strong> ${data.errors.map(error => error.message).join('<br>')}</p>
+                            `;
+                            addLog(`送信失敗 - エラー: ${data.errors.map(error => error.message).join(', ')}`);
+                        } else {
+                            resultDiv.innerHTML = `
+                                <h3>❌ デバッグテスト送信失敗</h3>
+                                <p><strong>ステータス:</strong> ${response.status}</p>
+                                <p><strong>エラー:</strong> 送信に失敗しました</p>
+                            `;
+                            addLog(`送信失敗 - ステータス: ${response.status}`);
+                        }
+                    });
+                }
+            })
+            .catch(error => {
+                addLog(`通信エラー: ${error.message}`);
+                const resultDiv = document.getElementById('result');
+                resultDiv.style.display = 'block';
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `
+                    <h3>❌ 通信エラー</h3>
+                    <p><strong>エラー:</strong> ${error.message}</p>
+                    <p>Formspreeとの通信に失敗しました。ネットワーク接続を確認してください。</p>
+                `;
+            })
+            .finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+                addLog('フォーム送信処理完了');
+            });
+        });
+        
+        addLog('デバッグフォーム初期化完了');
+    </script>
+</body>
+</html>
