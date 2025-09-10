@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function() {
         countObserver.observe(element);
     });
     
-    // フォームの送信処理
+    // フォームの送信処理（Formspree用）
     const contactForms = document.querySelectorAll('form');
     
     contactForms.forEach(form => {
@@ -151,23 +151,27 @@ document.addEventListener('DOMContentLoaded', function() {
             // フォームデータを取得
             const formData = new FormData(this);
             
-            // PHPファイルに送信
-            fetch('contact.php', {
+            // Formspreeに送信
+            fetch('https://formspree.io/f/mpwjbrdy', {
                 method: 'POST',
-                body: formData
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showMessage(data.message, 'success');
+            .then(response => {
+                if (response.ok) {
+                    showMessage('お問い合わせありがとうございます。1営業日以内にご返信いたします。', 'success');
                     // フォームをリセット
                     this.reset();
                 } else {
-                    if (data.errors && data.errors.length > 0) {
-                        showMessage(data.errors.join('<br>'), 'error');
-                    } else {
-                        showMessage(data.message || '送信に失敗しました。', 'error');
-                    }
+                    return response.json().then(data => {
+                        if (data.errors) {
+                            showMessage(data.errors.map(error => error.message).join('<br>'), 'error');
+                        } else {
+                            showMessage('送信に失敗しました。しばらく時間をおいて再度お試しください。', 'error');
+                        }
+                    });
                 }
             })
             .catch(error => {
