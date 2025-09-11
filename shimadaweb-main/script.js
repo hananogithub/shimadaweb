@@ -151,23 +151,18 @@ document.addEventListener('DOMContentLoaded', function() {
             // フォームデータを取得
             const formData = new FormData(this);
             
-            // PHPファイルに送信
-            fetch('contact.php', {
+            // Formspreeに送信
+            fetch('https://formspree.io/f/xpwjbelb', {
                 method: 'POST',
                 body: formData
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showMessage(data.message, 'success');
+            .then(response => {
+                if (response.ok) {
+                    showMessage('お問い合わせありがとうございます。1営業日以内にご返信いたします。', 'success');
                     // フォームをリセット
                     this.reset();
                 } else {
-                    if (data.errors && data.errors.length > 0) {
-                        showMessage(data.errors.join('<br>'), 'error');
-                    } else {
-                        showMessage(data.message || '送信に失敗しました。', 'error');
-                    }
+                    showMessage('送信に失敗しました。しばらく時間をおいて再度お試しください。', 'error');
                 }
             })
             .catch(error => {

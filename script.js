@@ -151,8 +151,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // フォームデータを取得
             const formData = new FormData(this);
             
-            // PHPファイルに送信
-            fetch('contact-xserver.php', {
+            // Formspreeに送信
+            fetch('https://formspree.io/f/xpwjbelb', {
                 method: 'POST',
                 body: formData
             })
@@ -162,13 +162,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     // フォームをリセット
                     this.reset();
                 } else {
-                    return response.json().then(data => {
-                        if (data.errors) {
-                            showMessage(data.errors.map(error => error.message).join('<br>'), 'error');
-                        } else {
-                            showMessage('送信に失敗しました。しばらく時間をおいて再度お試しください。', 'error');
-                        }
-                    });
+                    showMessage('送信に失敗しました。しばらく時間をおいて再度お試しください。', 'error');
                 }
             })
             .catch(error => {

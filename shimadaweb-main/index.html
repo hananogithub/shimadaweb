@@ -502,7 +502,7 @@
             <p class="section-subtitle">島田市の中小企業の皆様のビジネス成長をサポートいたします。まずは無料相談からお気軽にお声がけください。</p>
             
             <div class="contact-form-container">
-                <form class="contact-form" id="contactForm" action="contact.php" method="POST">
+                <form class="contact-form" id="contactForm" action="https://formspree.io/f/xpwjbelb" method="POST">
                     <div class="form-group">
                         <label for="companyName">会社名・お名前 <span class="required">*</span></label>
                         <input type="text" id="companyName" name="companyName" required>
@@ -534,6 +534,11 @@
                         <label for="message">お問い合わせ内容 <span class="required">*</span></label>
                         <textarea id="message" name="message" rows="5" placeholder="ご要望やご質問をお聞かせください" required></textarea>
                     </div>
+                    
+                    <!-- Formspree設定 -->
+                    <input type="hidden" name="_subject" value="【しまだWeb制作】お問い合わせ">
+                    <input type="hidden" name="_next" value="https://shimadaweb.online/thank-you.html">
+                    <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
                     
                     <div class="form-group checkbox-group">
                         <label class="checkbox-label">
